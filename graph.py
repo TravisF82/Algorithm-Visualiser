@@ -1,23 +1,37 @@
 import pygame
 import math
+import sys
 
-class Graph:
+print("PYTHON:", sys.executable)
 
-    GREEN = "#1bcf21"
-    BLUE = "#1154d9"
-    WHITE = "#ffffff"
-    PURPLE = "#d514db"
-    BLACK = "#000000"
-
+class Graph():
     PADDING = 50
 
     def __init__(self, width, height):
-        self.width = width
-        self.height = height
+        self.WINDOW_WIDTH = width
+        self.WINDOW_HEIGHT = height
 
-        self.window = pygame.display.set_mode((self.width, self.height))
-        pygame.display.set_caption("Algorithm Visualizer")
-    
-    def CreateBars(self, data):
-        self.bar_width = math.floor((self.width - self.PADDING * 2) / len(data))
-        self.bar_height = math.floor(self.height / (max(data) - min(data)))
+    def Run(self):
+        pygame.init()
+        window = pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
+        clock = pygame.time.Clock()
+        running = True
+
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+
+            pygame.display.update()
+            pygame.draw.rect(window, Color.WHITE, (50, 50, 100, 100), border_top_left_radius=10, border_top_right_radius=10)
+
+
+            clock.tick(240)
+        pygame.quit()
+
+class Color():
+    GREEN = (27, 207, 33)
+    BLUE = (17, 84, 217)
+    WHITE = (255, 255, 255)
+    PURPLE = (213, 20, 219)
+    BLACK = (0, 0, 0)

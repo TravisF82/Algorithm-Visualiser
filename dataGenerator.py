@@ -2,5 +2,5 @@ import random
 
 class DataGenerator:
     @staticmethod
-    def GenerateDataSet(minimum=10, maximum=10000):
-        return [random.randint(minimum, maximum) for _ in range(maximum - minimum + 1)]
+    def GenerateDataSet(maximum=10000):
+        return [random.randint(1, maximum + 1) for _ in range(maximum+ 1)]

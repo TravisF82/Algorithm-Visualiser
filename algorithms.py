@@ -8,6 +8,7 @@ def BubbleSort(data: list[int]):
                 data[i] = data[i + 1]
                 data[i + 1] = temp
                 swaps += 1
+
 def SelectionSort(data: list[int]):
     n = len(data)
     for i in range(n):
@@ -18,7 +19,6 @@ def SelectionSort(data: list[int]):
             if data[j] < data[smallestIndex]:
                 smallest = data[j]
                 smallestIndex = j
-            frames += 1
 
         data[i] = smallest
         data[smallestIndex] = current
@@ -27,9 +27,12 @@ def InsertionSort(data: list[int]) -> list[int]:
     n = len(data)
     for i in range(n):
         ...
-                
-InsertionSort([1, 8, 9, 3, 7, 2, 4, 3, 9, 10, 14, 13, 11])
 
 def QuickSort(data: list[int]) -> list[int]:
     ...
 
+def HeapSort(data: list[int]) -> list[int]:
+    ...
+
+def MergeSort(data: list[int]) -> list[int]:
+    ...
