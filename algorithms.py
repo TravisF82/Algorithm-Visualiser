@@ -1,38 +1,45 @@
-def BubbleSort(data: list[int]):
+from bar import Bar
+
+def BubbleSort():
     swaps = 1
     while swaps > 0:
         swaps = 0
-        for i in range(len(data) - 1):
-            if data[i] > data[i + 1]:
-                temp = data[i]
-                data[i] = data[i + 1]
-                data[i + 1] = temp
+        for i in range(len(Bar.bars) - 1):
+            yield i
+            if Bar.bars[i].val > Bar.bars[i + 1].val:
+                temp = Bar.bars[i]
+                Bar.bars[i] = Bar.bars[i + 1]
+                Bar.bars[i + 1] = temp
                 swaps += 1
 
-def SelectionSort(data: list[int]):
-    n = len(data)
+"""
+Time Complexity: O(n^2)
+"""
+def SelectionSort():
+    n = len(Bar.bars)
     for i in range(n):
-        current = data[i]
+        current = Bar.bars[i]
         smallest = current
         smallestIndex = i
         for j in range(i, n):
-            if data[j] < data[smallestIndex]:
-                smallest = data[j]
+            yield j
+            if Bar.bars[j].val < Bar.bars[smallestIndex].val:
+                smallest = Bar.bars[j]
                 smallestIndex = j
 
-        data[i] = smallest
-        data[smallestIndex] = current
+        Bar.bars[i] = smallest
+        Bar.bars[smallestIndex] = current
         
 def InsertionSort(data: list[int]) -> list[int]:
     n = len(data)
     for i in range(n):
         ...
 
-def QuickSort(data: list[int]) -> list[int]:
+def QuickSort():
     ...
 
-def HeapSort(data: list[int]) -> list[int]:
-    ...
+def HeapSort():
+    
 
-def MergeSort(data: list[int]) -> list[int]:
-    ...
+def MergeSort():
+    pass
