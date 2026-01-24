@@ -4,7 +4,7 @@ from graph import Graph
     
 
 def main():
-    graph = Graph(1280, 720, algorithms.SelectionSort)
+    graph = Graph(1280, 720)
     dataGenerator.DataGenerator.GenerateDataSet(50)
     graph.Run()
 
