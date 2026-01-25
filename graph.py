@@ -1,13 +1,16 @@
 import pygame
 from bar import Bar
 import dataGenerator
-import math
 import algorithms
+import time
 class Graph():
 
-    PADDING = 50
+    PADDING = 100
     BAR_EDGE_PADDING = 10
     MAX_FPS = 240
+    VALUES_STEP = 100
+    MIN_VALUES = 100
+    MAX_VALUES = 1000
 
     def __init__(self, width, height):
         self.WINDOW_WIDTH = width
@@ -16,11 +19,14 @@ class Graph():
         self.xaxis_width = (self.WINDOW_WIDTH - self.PADDING * 2)
         self.xaxis_x = (self.WINDOW_WIDTH - self.xaxis_width) / 2
         self.xaxis_y = self.WINDOW_HEIGHT - self.PADDING
+        self.num_values = 100
         self.sorting_algorithm_index = 0
         self.sorting_algorithm = algorithms.Algorithm.algorithms[self.sorting_algorithm_index]
         self.sorting_algorithm_generator = None # holds the current sorting algorithm to be executed once only
         self.current_bar = None
         self.is_sorting = False
+        self.start_time = 0
+        self.elapsed_time = 0
 
     def DrawBars(self):
         num_bars = len(Bar.bars)
@@ -29,7 +35,8 @@ class Graph():
             if Bar.max_val > 0:
                 color = Color.WHITE if i == self.current_bar else Color.GREEN
                 bar_height = (Bar.bars[i].val / Bar.max_val) * (self.WINDOW_HEIGHT - self.PADDING * 2)
-                pygame.draw.rect(self.__window, color, ((self.xaxis_x + self.BAR_EDGE_PADDING) + (i * bar_width) + 10, self.xaxis_y - bar_height, bar_width, bar_height))
+                pygame.draw.rect(self.__window, color, ((self.xaxis_x + self.BAR_EDGE_PADDING) + (i * bar_width), self.xaxis_y - bar_height, bar_width, bar_height))
+                
 
 
     def Run(self):
@@ -47,7 +54,7 @@ class Graph():
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_r and not self.is_sorting:
-                        dataGenerator.DataGenerator.GenerateDataSet(50)
+                        dataGenerator.DataGenerator.GenerateDataSet(self.num_values)
                     elif event.key == pygame.K_RIGHT and not self.is_sorting:
                         self.sorting_algorithm_index += 1
                         if self.sorting_algorithm_index >= len(algorithms.Algorithm.algorithms):
@@ -61,24 +68,50 @@ class Graph():
                     elif event.key == pygame.K_SPACE and not self.is_sorting:
                         self.is_sorting = True
                         self.sorting_algorithm_generator = self.sorting_algorithm()
+                        self.start_time = time.time()
+                        self.elapsed_time = 0
+                    elif event.key == pygame.K_UP and not self.is_sorting:
+                        self.num_values += self.VALUES_STEP
+                        if self.num_values > self.MAX_VALUES:
+                            self.num_values = self.MAX_VALUES
+                        dataGenerator.DataGenerator.GenerateDataSet(self.num_values)
+                    elif event.key == pygame.K_DOWN and not self.is_sorting:
+                        self.num_values -= self.VALUES_STEP
+                        if self.num_values < self.MIN_VALUES:
+                            self.num_values = self.MIN_VALUES
+                        dataGenerator.DataGenerator.GenerateDataSet(self.num_values)
                     
 
             self.__window.fill(Color.BLACK)
             font = pygame.font.SysFont('Comic Sans MS', 30)
-            text_surface = font.render(f"{self.sorting_algorithm.__name__} - Time elapsed:  ", True, Color.WHITE)
-            self.__window.blit(text_surface, dest=(50, 50))
+            
+            
             xaxis = pygame.draw.rect(self.__window, Color.WHITE, (self.xaxis_x, self.xaxis_y, self.xaxis_width, 2))
 
             if self.is_sorting:
                 try:
                     self.current_bar = next(self.sorting_algorithm_generator)
                     self.is_sorting = True
+                    text_surface = font.render(f"{self.sorting_algorithm.__name__} - Time elapsed:  {self.elapsed_time:.2f}s", True, Color.WHITE)
+                    self.__window.blit(text_surface, dest=(20, self.WINDOW_HEIGHT - 50))
+                    self.elapsed_time = time.time() - self.start_time
                 except StopIteration:
                     self.current_bar = None
                     self.is_sorting = False
                     self.sorting_algorithm_generator = None
-            self.DrawBars()
+                    self.start_time = 0
+            elif not self.is_sorting and self.elapsed_time > 0:
+                text_surface = font.render(f"{self.sorting_algorithm.__name__} - Time elapsed:  {self.elapsed_time:.2f}s", True, Color.WHITE)
+                self.__window.blit(text_surface, dest=(20, self.WINDOW_HEIGHT - 50))
+            else:
+                text_surface = font.render(f"{self.sorting_algorithm.__name__}", True, Color.WHITE)
+                self.__window.blit(text_surface, dest=(20, self.WINDOW_HEIGHT - 50))
 
+
+            text_surface_controls = font.render("Up/Down - Increase/decrease values, Left/Right - Cycle algorithms, R - New values, Space - Run algorithm", True, Color.WHITE)
+            self.__window.blit(text_surface_controls, dest=((self.WINDOW_WIDTH - text_surface_controls.get_width()) // 2, 50))
+
+            self.DrawBars()
             clock.tick(self.MAX_FPS)
             pygame.display.update()
         pygame.quit()
