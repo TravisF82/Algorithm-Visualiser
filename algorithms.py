@@ -39,19 +39,18 @@ class Algorithm:
             Bar.bars[i] = smallest
             Bar.bars[smallestIndex] = current
             
-    def InsertionSort(data: list[int]) -> list[int]:
-        n = len(data)
+    def InsertionSort():
+        n = len(Bar.bars)
         for i in range(n):
             ...
 
     def QuickSort():
         ...
 
-    def HeapSort(data=None):
-        middle = len(data) // 2
-        half1, half2 = data[:middle], data[middle:]
+    def HeapSort():
+        pass
 
     def MergeSort():
         pass
 
-    algorithms = [BubbleSort, SelectionSort]
+    algorithms = [BubbleSort, SelectionSort, InsertionSort, QuickSort, HeapSort, MergeSort]
