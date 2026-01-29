@@ -45,17 +45,17 @@ class Graph():
         bar_width = (self.WINDOW_WIDTH - (self.BAR_EDGE_PADDING * 2) - (self.PADDING * 2)) // num_bars
         for i in range(num_bars):
             if Bar.max_val > 0:
-                gap_offset = -1 if i % 2 == 0 else 1
+                gap_offset = 1
                 color = Color.WHITE if i == self.current_bar else Color.GREEN
                 bar_height = (Bar.bars[i].val / Bar.max_val) * (self.WINDOW_HEIGHT - self.PADDING * 2)
-                pygame.draw.rect(self.__window, color, ((self.xaxis_x + self.BAR_EDGE_PADDING) + (i * bar_width) + gap_offset, self.xaxis_y - bar_height, bar_width, bar_height))
+                pygame.draw.rect(self.__window, color, ((self.xaxis_x + self.BAR_EDGE_PADDING) + (i * bar_width) + (i * gap_offset), self.xaxis_y - bar_height, bar_width, bar_height))
 
     def DrawControlsText(self, font):
         text_surface_controls = font.render("Up/Down - Increase/decrease values, Left/Right - Cycle algorithms, R - New values, Space - Run algorithm, Esc - Close", True, Color.WHITE)
         self.__window.blit(text_surface_controls, dest=((self.WINDOW_WIDTH - text_surface_controls.get_width()) // 2, 50))
 
     def DrawStats(self, font):
-        text_surface = font.render(f"{self.sorting_algorithm.__name__} - Time elapsed:  {self.elapsed_time:.2f}s, Comparisons = {self.compare}, Swaps = {self.swaps}", True, Color.WHITE)
+        text_surface = font.render(f"{self.sorting_algorithm.__name__} - Time elapsed:  {self.elapsed_time:.2f}s, Comparisons = {self.compare}, Swaps = {self.swaps}, Elements = {self.num_values}", True, Color.WHITE)
         self.__window.blit(text_surface, dest=(20, self.WINDOW_HEIGHT - 50))
 
     def ResetStats(self):
