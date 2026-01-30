@@ -2,7 +2,7 @@ import pygame
 from bar import Bar
 import dataGenerator
 import algorithms
-import time
+from datetime import time
 class Graph():
 
     PADDING = 100
@@ -32,7 +32,7 @@ class Graph():
         self.swaps = 0
         dataGenerator.DataGenerator.GenerateDataSet(self.num_values)
 
-    def InitialiseWindow():
+    def InitialiseWindow(self):
         pygame.init()
         pygame.font.init()
         pygame.display.set_caption("Algorithm Visualizer")
@@ -62,7 +62,7 @@ class Graph():
         self.__window.blit(text_surface_controls, dest=((self.WINDOW_WIDTH - text_surface_controls.get_width()) // 2, 50))
 
     def DrawStats(self, font):
-        text_surface = font.render(f"{self.sorting_algorithm.__name__} - Time elapsed:  {self.elapsed_time:.2f}s, Comparisons = {self.compare}, Swaps = {self.swaps}, Elements = {self.num_values}", True, Color.WHITE)
+        text_surface = font.render(f"{self.sorting_algorithm.__name__} - Time elapsed:  {self.elapsed_time:,.2f}s | Comparisons = {self.compare:,} | Swaps = {self.swaps:,} | Elements = {self.num_values:,}", True, Color.WHITE)
         self.__window.blit(text_surface, dest=(20, self.WINDOW_HEIGHT - 50))
 
     def ResetStats(self):
